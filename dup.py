@@ -1,11 +1,21 @@
+import os
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
-# MongoDB connection details
-client = MongoClient("mongodb+srv://INLINEKUTTUBOT2:INLINEKUTTUBOT2@inlinekuttubot.vzgwwz8.mongodb.net/?retryWrites=true&w=majority&appName=INLINEKUTTUBOT")
-db = client["INLINEKUTTUBOT2"]
-collection = db["files2"]
+# Load environment variables from .env file
+load_dotenv()
 
-def delete_duplicate_files():
+# MongoDB connection details from environment
+MONGODB_URI = os.getenv("mongodb+srv://INLINEKUTTUBOT2:INLINEKUTTUBOT2@inlinekuttubot.vzgwwz8.mongodb.net/?retryWrites=true&w=majority&appName=INLINEKUTTUBOT")
+DATABASE_NAME = os.getenv("INLINEKUTTUBOT2")
+COLLECTION_NAME = os.getenv("files2")
+
+# Connect to MongoDB
+client = MongoClient(MONGODB_URI)
+db = client[DATABASE_NAME]
+collection = db[COLLECTION_NAME]
+
+def delete_duplicate_files(dry_run=True):
     # Group files by size and keep only one unique file per size
     pipeline = [
         {
@@ -22,14 +32,24 @@ def delete_duplicate_files():
     
     duplicates = list(collection.aggregate(pipeline))
     
+    total_deleted = 0
     for group in duplicates:
         file_ids = group["file_ids"]
-        # Keep one file ID and delete the rest
-        file_ids_to_delete = file_ids[1:]  # Exclude the first file ID
+        file_ids_to_delete = file_ids[1:]  # Keep one file, delete the rest
         
-        result = collection.delete_many({"_id": {"$in": file_ids_to_delete}})
-        print(f"Deleted {result.deleted_count} duplicate files of size {group['_id']}")
+        if dry_run:
+            print(f"Would delete {len(file_ids_to_delete)} files of size {group['_id']}: {file_ids_to_delete}")
+        else:
+            result = collection.delete_many({"_id": {"$in": file_ids_to_delete}})
+            print(f"Deleted {result.deleted_count} duplicate files of size {group['_id']}")
+            total_deleted += result.deleted_count
+
+    if not dry_run:
+        print(f"Total duplicates removed: {total_deleted}")
+    else:
+        print("Dry run completed. No files were deleted.")
 
 if __name__ == "__main__":
-    delete_duplicate_files()
-    print("Duplicate files removed.")
+    # Set dry_run to False to actually delete duplicates
+    delete_duplicate_files(dry_run=True)
+    
