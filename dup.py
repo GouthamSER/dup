@@ -2,9 +2,6 @@
 from pymongo import MongoClient
 
 
-# Load environment variables from .env file
-load_dotenv()
-
 # MongoDB connection details from environment
 MONGODB_URI = "mongodb+srv://INLINEKUTTUBOT2:INLINEKUTTUBOT2@inlinekuttubot.vzgwwz8.mongodb.net/?retryWrites=true&w=majority&appName=INLINEKUTTUBOT"
 DATABASE_NAME = "INLINEKUTTUBOT2"
