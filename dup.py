@@ -1,14 +1,14 @@
-import os
+
 from pymongo import MongoClient
-from dotenv import load_dotenv
+
 
 # Load environment variables from .env file
 load_dotenv()
 
 # MongoDB connection details from environment
-MONGODB_URI = os.getenv("mongodb+srv://INLINEKUTTUBOT2:INLINEKUTTUBOT2@inlinekuttubot.vzgwwz8.mongodb.net/?retryWrites=true&w=majority&appName=INLINEKUTTUBOT")
-DATABASE_NAME = os.getenv("INLINEKUTTUBOT2")
-COLLECTION_NAME = os.getenv("files2")
+MONGODB_URI = "mongodb+srv://INLINEKUTTUBOT2:INLINEKUTTUBOT2@inlinekuttubot.vzgwwz8.mongodb.net/?retryWrites=true&w=majority&appName=INLINEKUTTUBOT"
+DATABASE_NAME = "INLINEKUTTUBOT2"
+COLLECTION_NAME = "files2"
 
 # Connect to MongoDB
 client = MongoClient(MONGODB_URI)
