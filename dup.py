@@ -1,9 +1,7 @@
-
 from pymongo import MongoClient
 
-
-# MongoDB connection details from environment
-MONGODB_URI = "mongodb.net/?retryWrites=true&w=majority&appName=INLINEKUTTUBOT"
+# MongoDB connection details
+MONGODB_URI = "mongodb+srv://INLINEKUTTUBOT2:INLINEKUTTUBOT2@inlinekuttubot.vzgwwz8.mongodb.net/?retryWrites=true&w=majority&appName=INLINEKUTTUBOT"
 DATABASE_NAME = "INLINEKUTTUBOT2"
 COLLECTION_NAME = "files2"
 
